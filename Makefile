@@ -1,5 +1,18 @@
-URL="http://cds.sun.com/is-bin/INTERSHOP.enfinity/WFS/CDS-CDS_Developer-Site/en_US/-/USD/VerifyItem-Start/java_ee_sdk-6u2-unix-ml.sh?BundledLineItemUUID=DqiJ_hCy3.YAAAEv0iQIRwRz&OrderID=DU.J_hCyakoAAAEvwCQIRwRz&ProductID=ZdyJ_hCyVuAAAAEurb8Hek4c&FileName=/java_ee_sdk-6u2-unix-ml.sh"
-FILENAME="java_ee_sdk-6u2-unix-ml.sh"
+URL = http://tthsum.devs.nu
+
+.PHONY: test clean mount umount
+
+test: mount
+	# OBSERVE: Filenames with a period ('.') in them are treated as files;
+	# those without are treated as directories.
+	@echo
+	@echo Doing md5sum on $(URL)/pkg/tthsum-1.2.0-win32-bin.zip
+	@echo
+	md5sum remote/pkg/tthsum-1.2.0-win32-bin.zip
+	@echo
+	@echo Compare with md5sum as shown on index page:
+	@echo
+	grep win32 remote/index.html | sed -e 's/.*<code>\([^<]*\).*/\1/'
 
 curlhttpfs: curlhttpfs.c
 	gcc -Wall -I/usr/include/fuse/ -D_FILE_OFFSET_BITS=64 curlhttpfs.c -o curlhttpfs -lcurl -lpthread -lfuse
@@ -8,7 +21,8 @@ clean: umount
 	trash curlhttpfs
 
 mount: curlhttpfs umount
-	./curlhttpfs -o url=${URL},filename=${FILENAME},allow_root remote/
+	@mkdir -p remote
+	./curlhttpfs -o base_url=$(URL) remote
 
 umount:
 	-fusermount -uz remote/
