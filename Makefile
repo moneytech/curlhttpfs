@@ -23,7 +23,7 @@ clean: umount
 
 mount: curlhttpfs umount
 	@mkdir -p remote
-	./curlhttpfs -o base_url=$(URL) remote
+	./curlhttpfs -o base_url=$(URL),ro remote
 
 umount:
 	-fusermount -uz remote/
