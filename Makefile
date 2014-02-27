@@ -12,13 +12,14 @@ test: mount
 	@echo
 	@echo Compare with md5sum as shown on index page:
 	@echo
-	grep win32 remote/index.html | sed -e 's/.*<code>\([^<]*\).*/\1/'
+	w3m remote/index.html | grep win32
 
 curlhttpfs: curlhttpfs.c
 	gcc -Wall -I/usr/include/fuse/ -D_FILE_OFFSET_BITS=64 curlhttpfs.c -o curlhttpfs -lcurl -lpthread -lfuse
 
 clean: umount
-	trash curlhttpfs
+	$(RM) curlhttpfs
+	-rmdir remote
 
 mount: curlhttpfs umount
 	@mkdir -p remote
