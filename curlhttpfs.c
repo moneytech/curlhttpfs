@@ -172,7 +172,8 @@ static size_t my_parse_status(struct httpfs_buffer *httpfs_buf,
 	}
 
 	if (curl_response < 200 || 300 <= curl_response) {
-		logmsg("my_write_callback: bad response code %ld\n", curl_response);
+		logmsg("my_write_callback: bad response code %ld\n",
+		       curl_response);
 		return (size_t)-1;
 	}
 
@@ -186,8 +187,10 @@ static size_t my_parse_header(struct httpfs_buffer *httpfs_buf,
 			      const char *src, size_t len)
 {
 	if (len == 2 && memcmp(src, "\r\n", 2) == 0) {
-		if (httpfs_buf->status == 206 && httpfs_buf->remote_size == -1) {
-			logmsg("my_write_callback: Got 206 but no usable Content-Range\n");
+		if (httpfs_buf->status == 206 &&
+		    httpfs_buf->remote_size == -1) {
+			logmsg("my_write_callback: Got 206 but no usable "
+			       "Content-Range\n");
 			return (size_t)-1;
 		}
 		httpfs_buf->in_header = 0;
@@ -204,7 +207,8 @@ static size_t my_parse_header(struct httpfs_buffer *httpfs_buf,
 			if (sscanf(src, " bytes %lu-%lu/%lu ",
 				   &r1, &r2, &r3) == 3) {
 				httpfs_buf->remote_start = (ssize_t)r1;
-				httpfs_buf->remote_chunk = (ssize_t)(r2 + 1 - r1);
+				httpfs_buf->remote_chunk = (ssize_t)(r2 + 1 -
+								     r1);
 				httpfs_buf->remote_size = (ssize_t)r3;
 			}
 		}
