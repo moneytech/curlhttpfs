@@ -49,3 +49,13 @@ Bugs/Limitations:
   * Vim(1) will create an seemingly endless loop trying to write
     swapfiles with different names on the RO-filesystem. Don't try to
     write any files there.
+
+  * There are a few unchecked buffers here and there, they should be
+    fixed: strcpy, strcat, sprintf. Buffer length of URL should be
+    increased. Structure names and properties could be refactored for
+    better naming and clarity.
+
+  * Logging should be optional (mount option).
+
+  * Should add curl options to specify timeouts and think about how to
+    handle those.
